@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "os-process-engine"
+version = "0.1.0"
+description = "OS-ProcessEngine: motor de abstracción, planificación de CPU y rendimiento de procesos (Proyecto Integrador Unidad I)."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "typer>=0.12",
+    "rich>=13.7",
+    "matplotlib>=3.8",
+    "pydantic>=2.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-timeout>=2.3",
+    "hypothesis>=6.100",
+    "ruff>=0.5",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+]
+
+[project.scripts]
+osengine = "os_process_engine.cli.main:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/os_process_engine"]
+
+# ---------------------------------------------------------------- calidad
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF", "PL"]
+ignore = ["PLR2004"]  # números mágicos: frecuentes en casos de prueba de planificación
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR0913"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["os_process_engine"]
+
+# ---------------------------------------------------------------- pruebas
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --cov=os_process_engine --cov-report=term-missing"
+timeout = 30  # evita que un deadlock en IPC congele la suite
+markers = [
+    "stress: pruebas de estrés de IPC o carga masiva (lentas)",
+    "reference: casos de referencia resueltos a mano",
+]

@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Entornos
+.venv/
+venv/
+.env
+
+# Herramientas
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.hypothesis/
+
+# Salidas del simulador
+output/
+*.csv
+*.png
+!docs/**/*.png
+
+# Editores / SO
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
